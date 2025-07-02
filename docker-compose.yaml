@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  python-message:
+    build : ./helloworld-demo-python
+    container_name: compose-python
+    ports:
+      - 5000:5000
+    networks:
+      - my-network
+
+
+  java-message:
+    build: ./simple-java-docker
+    container_name: compose-java
+    depends_on:
+      - python-message
+    networks:
+      - my-network
+
+networks:
+  my-network:
+      driver: bridge
