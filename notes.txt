@@ -1,0 +1,47 @@
+#Dcoker Compose
+1 - this is best like while creating image and container everytime you need to build image and run container if 2 container two times need to run build and run command
+2 - to do automation of this we used compose file which is in yaml format where we pass value as key:pair type
+33 - it will create all thing we do not need to run command one thing we need to do is
+4 - docker-compose up --build -d ---> this we run this compose file and compose file will do all thing for you to create image to build container to run on ports
+
+
+
+#######################################################################################################################
+version: '3.8'
+
+services:
+  python-message:
+    build : ./helloworld-demo-python
+    container_name: compose-python
+    ports:
+      - 5000:5000
+    networks:
+      - my-network
+
+
+  java-message:
+    build: ./simple-java-docker
+    container_name: compose-java
+    depends_on:
+      - python-message
+    networks:
+      - my-network
+
+networks:
+  my-network:
+      driver: bridge
+##################################################################################################################
+
+so version is docker compose version need to use
+
+service is image name their we can pass as we have two image python and java that name here we used
+build --> here we pass docker file path for that image
+ports: ---> as we use flask in python need 5000 port we are enable this
+networks: ----> we create my-network so we can run 2 container on that so we use networks for that
+
+in below we use another image which i s java
+depends_on: ---> java is depends on python some time docker can create java image and container first before pythhon image and container this can give issue so depends_on if we use it will                    crete and build container after python container
+below we mentioned netwrok details
+this is how compose file will do all this we just need to run compose file command which is
+- > docker-compose up --build -d
+-> docker-compose down --> will stop everythin which run from compose
